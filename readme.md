@@ -11,4 +11,4 @@ This repository contains source code for the integration of Maui essentials in m
 
 ## Licence
 
-Avae.macOS.Essentials is licenced under the [MIT licence](licence.md).
+Avae.macOS.Essentials is licenced under the [MIT licence](Licence.md).

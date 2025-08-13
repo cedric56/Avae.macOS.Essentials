@@ -5,7 +5,9 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
-    <AssemblyTitle>Avae.macOS.Essentials</AssemblyTitle>
+    <PackageId>Avae.macOS.Essentials</PackageId>
+    <PackageReadmeFile>Readme.md</PackageReadmeFile>
+    <PackageLicenseFile>Licence.md</PackageLicenseFile>
     <AssemblyName>Microsoft.Maui.Essentials</AssemblyName>
     <RootNamespace>Microsoft.Maui.Essentials</RootNamespace>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
@@ -18,6 +20,10 @@
   <ItemGroup Condition=" '$(TargetPlatformIdentifier)' == 'macos' ">
     <Compile Include="**\*.macos.cs" Exclude="$(DefaultItemExcludes);$(DefaultExcludesInProjectFolder)" />
     <Compile Include="**\*.macos.*.cs" Exclude="$(DefaultItemExcludes);$(DefaultExcludesInProjectFolder)" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Licence.md" Pack="true" PackagePath=""/>
+    <None Include="Readme.md" Pack="true" PackagePath=""/>
   </ItemGroup>
   
 </Project>
