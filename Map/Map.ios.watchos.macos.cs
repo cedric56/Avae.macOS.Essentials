@@ -40,17 +40,6 @@ namespace Microsoft.Maui.ApplicationModel
 			if (options == null)
 				throw new ArgumentNullException(nameof(options));
 
-#if __IOS__
-			var address = new MKPlacemarkAddress
-			{
-				CountryCode = placemark.CountryCode,
-				Country = placemark.CountryName,
-				State = placemark.AdminArea,
-				Street = placemark.Thoroughfare,
-				City = placemark.Locality,
-				Zip = placemark.PostalCode
-			}.Dictionary;
-#else
 			var address = new NSMutableDictionary
 			{
 				["City"] = new NSString(placemark.Locality ?? string.Empty),
@@ -60,7 +49,6 @@ namespace Microsoft.Maui.ApplicationModel
 				["PostalCode"] = new NSString(placemark.PostalCode ?? string.Empty),
 				["IsoCountryCode"] = new NSString(placemark.CountryCode ?? string.Empty)
 			};
-#endif
 
 			var resolvedPlacemarks = await GetPlacemarksAsync(address);
 			if (resolvedPlacemarks?.Length > 0)
@@ -69,15 +57,11 @@ namespace Microsoft.Maui.ApplicationModel
 			}
 			else
 			{
-#if __IOS__ || __MACOS__
 				// https://developer.apple.com/library/archive/featuredarticles/iPhoneURLScheme_Reference/MapLinks/MapLinks.html
 				var uri = $"http://maps.apple.com/?q={placemark.GetEscapedAddress()}";
 				var nsurl = NSUrl.FromString(uri);
 
 				return await Launcher.Default.TryOpenAsync(nsurl);
-#else
-				return await OpenPlacemark(new MKPlacemark(default, address), options);
-#endif
 			}
 		}
 

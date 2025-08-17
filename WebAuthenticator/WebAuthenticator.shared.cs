@@ -1,9 +1,4 @@
 #nullable enable
-using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
-
 namespace Microsoft.Maui.Authentication
 {
 	/// <summary>
@@ -24,21 +19,12 @@ namespace Microsoft.Maui.Authentication
 	/// </summary>
 	public interface IPlatformWebAuthenticatorCallback
 	{
-#if IOS || MACCATALYST || MACOS
 		/// <summary>
 		/// Opens the specified URI to start the authentication flow.
 		/// </summary>
 		/// <param name="uri">The URI to open that will start the authentication flow.</param>
 		/// <returns><see langword="true"/> when the URI has been opened, otherwise <see langword="false"/>.</returns>
 		bool OpenUrlCallback(Uri uri);
-#elif ANDROID
-		/// <summary>
-		/// The event that is triggered when an authentication flow calls back into the Android application.
-		/// </summary>
-		/// <param name="intent">An <see cref="Android.Content.Intent"/> object containing additional data about this resume operation.</param>
-		/// <returns><see langword="true"/> when the callback can be processed, otherwise <see langword="false"/>.</returns>
-		bool OnResumeCallback(Android.Content.Intent intent);
-#endif
 	}
 
 	/// <summary>
@@ -112,36 +98,9 @@ namespace Microsoft.Maui.Authentication
 		public static Task<WebAuthenticatorResult> AuthenticateAsync(this IWebAuthenticator webAuthenticator, Uri url, Uri callbackUrl) =>
 			webAuthenticator.AuthenticateAsync(new WebAuthenticatorOptions { Url = url, CallbackUrl = callbackUrl });
 
-#if IOS || MACCATALYST || MACOS
 		/// <inheritdoc cref="IPlatformWebAuthenticatorCallback.OpenUrlCallback(Uri)"/>
 		public static bool OpenUrl(this IWebAuthenticator webAuthenticator, Uri uri) =>
 			webAuthenticator.AsPlatformCallback().OpenUrlCallback(uri);
-
-		/// <inheritdoc cref="ApplicationModel.Platform.OpenUrl(UIKit.UIApplication, Foundation.NSUrl, Foundation.NSDictionary)"/>
-		//public static bool OpenUrl(this IWebAuthenticator webAuthenticator,   UIKit.UIApplication app, Foundation.NSUrl url, Foundation.NSDictionary options) 
-		//{
-		//	if(url?.AbsoluteString != null)
-		//	{
-		//		return webAuthenticator.OpenUrl(new Uri(url.AbsoluteString));
-		//	}
-		//	return false;
-		//}
-
-		///// <inheritdoc cref="ApplicationModel.Platform.ContinueUserActivity(UIKit.UIApplication, Foundation.NSUserActivity, UIKit.UIApplicationRestorationHandler)"/>
-		//public static bool ContinueUserActivity(this IWebAuthenticator webAuthenticator, UIKit.UIApplication application, Foundation.NSUserActivity userActivity, UIKit.UIApplicationRestorationHandler completionHandler)
-		//{
-		//	var uri = userActivity?.WebPageUrl?.AbsoluteString;
-		//	if (string.IsNullOrEmpty(uri))
-		//		return false;
-
-		//	return webAuthenticator.OpenUrl(new Uri(uri));
-		//}
-
-#elif ANDROID
-		/// <inheritdoc cref="IPlatformWebAuthenticatorCallback.OnResumeCallback(Android.Content.Intent)"/>
-		public static bool OnResume(this IWebAuthenticator webAuthenticator, Android.Content.Intent intent) =>
-			webAuthenticator.AsPlatformCallback().OnResumeCallback(intent);
-#endif
 	}
 
 	/// <summary>

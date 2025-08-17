@@ -53,7 +53,7 @@ Once installed, you can use Microsoft.Maui.Essentials APIs within your Avalonia.
 
 # Example: Accessing Geolocation
 ````
-using Microsoft.Maui.Essentials;
+using Microsoft.Maui.Devices.Sensors;
 
 var location = await Geolocation.GetLocationAsync();
 

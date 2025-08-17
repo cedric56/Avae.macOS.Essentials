@@ -41,7 +41,6 @@ namespace Microsoft.Maui.Storage
 	/// </summary>
 	public interface IPlatformSecureStorage
 	{
-#if IOS || MACCATALYST || MACOS || TVOS || WATCHOS
 		/// <summary>
 		/// Default <see cref="Security.SecAccessible"/> to use for all Get/Set calls to KeyChain.
 		/// Default value is <see cref="Security.SecAccessible.AfterFirstUnlock"/>.
@@ -56,7 +55,6 @@ namespace Microsoft.Maui.Storage
 		/// <param name="accessible">The KeyChain accessibility to create the encrypted record with.</param>
 		/// <returns>A <see cref="Task"/> object with the current status of the asynchronous operation.</returns>
 		Task SetAsync(string key, string value, Security.SecAccessible accessible);
-#endif
 	}
 
 	/// <summary>
@@ -109,7 +107,6 @@ namespace Microsoft.Maui.Storage
 		public static void RemoveAll() =>
 			Current.RemoveAll();
 
-#if IOS || MACCATALYST || MACOS || TVOS || WATCHOS
 		/// <summary>
 		/// Default <see cref="Security.SecAccessible"/> to use for all Get/Set calls to KeyChain.
 		/// Default value is <see cref="Security.SecAccessible.AfterFirstUnlock"/>.
@@ -129,7 +126,6 @@ namespace Microsoft.Maui.Storage
 		/// <returns>A <see cref="Task"/> object with the current status of the asynchronous operation.</returns>
 		public static Task SetAsync(string key, string value, Security.SecAccessible accessible) =>
 			Current.SetAsync(key, value, accessible);
-#endif
 
 		static ISecureStorage Current => Storage.SecureStorage.Default;
 
@@ -152,7 +148,6 @@ namespace Microsoft.Maui.Storage
 	/// </summary>
 	public static class SecureStorageExtensions
 	{
-#if IOS || MACCATALYST || MACOS || TVOS || WATCHOS
 		/// <summary>
 		/// Gets the default KeyChain accessibility used to encrypt data.
 		/// </summary>
@@ -197,15 +192,12 @@ namespace Microsoft.Maui.Storage
 
 			return platform.SetAsync(key, value, accessible);
 		}
-#endif
 	}
 
 	partial class SecureStorageImplementation
 	{
-#if (NETSTANDARD || !PLATFORM) || NET6_0_OR_GREATER
 		// Special Alias that is only used for Secure Storage. All others should use: Preferences.GetPrivatePreferencesSharedName
 		internal static readonly string Alias = Preferences.GetPrivatePreferencesSharedName("preferences");
-#endif
 
 		public Task<string?> GetAsync(string key)
 		{

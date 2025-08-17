@@ -1,11 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Net;
-using System.Threading.Tasks;
-#if !(MACCATALYST || MACOS)
-using CoreTelephony;
-#endif
 using CoreFoundation;
+using System.Net;
 using SystemConfiguration;
 
 namespace Microsoft.Maui.Networking
@@ -33,11 +27,6 @@ namespace Microsoft.Maui.Networking
 				if (!IsReachableWithoutRequiringConnection(flags))
 					return NetworkStatus.NotReachable;
 
-#if __IOS__
-				if ((flags & NetworkReachabilityFlags.IsWWAN) != 0)
-					return NetworkStatus.ReachableViaCarrierDataNetwork;
-#endif
-
 				return NetworkStatus.ReachableViaWiFiNetwork;
 			}
 		}
@@ -47,12 +36,6 @@ namespace Microsoft.Maui.Networking
 			var status = NetworkStatus.NotReachable;
 
 			var defaultNetworkAvailable = IsNetworkAvailable(out var flags);
-
-#if __IOS__
-			// If it's a WWAN connection..
-			if ((flags & NetworkReachabilityFlags.IsWWAN) != 0)
-				status = NetworkStatus.ReachableViaCarrierDataNetwork;
-#endif
 
 			// If the connection is reachable and no connection is required, then assume it's WiFi
 			if (defaultNetworkAvailable)
@@ -77,17 +60,8 @@ namespace Microsoft.Maui.Networking
 
 			var defaultNetworkAvailable = IsNetworkAvailable(out var flags);
 
-#if __IOS__
-			// If it's a WWAN connection.
-			if ((flags & NetworkReachabilityFlags.IsWWAN) != 0)
-			{
-				status.Add(NetworkStatus.ReachableViaCarrierDataNetwork);
-			}
-			else if (defaultNetworkAvailable)
-#else
 			// If the connection is reachable and no connection is required, then assume it's WiFi
 			if (defaultNetworkAvailable)
-#endif
 			{
 				status.Add(NetworkStatus.ReachableViaWiFiNetwork);
 			}
@@ -122,13 +96,6 @@ namespace Microsoft.Maui.Networking
 			// Do we need a connection to reach it?
 			var noConnectionRequired = (flags & NetworkReachabilityFlags.ConnectionRequired) == 0;
 
-#if __IOS__
-			// Since the network stack will automatically try to get the WAN up,
-			// probe that
-			if ((flags & NetworkReachabilityFlags.IsWWAN) != 0)
-				noConnectionRequired = true;
-#endif
-
 			return isReachable && noConnectionRequired;
 		}
 	}
@@ -153,12 +120,6 @@ namespace Microsoft.Maui.Networking
 
 			remoteHostReachability.SetNotification(OnChange);
 			remoteHostReachability.Schedule(CFRunLoop.Main, CFRunLoop.ModeDefault);
-
-#if !(MACCATALYST || MACOS)
-#pragma warning disable BI1234, CA1416 // Analyzer bug https://github.com/dotnet/roslyn-analyzers/issues/5938
-			ConnectivityImplementation.CellularData.RestrictionDidUpdateNotifier = new Action<CTCellularDataRestrictedState>(OnRestrictedStateChanged);
-#pragma warning restore BI1234, CA1416
-#endif
 		}
 
 		internal event Action ReachabilityChanged;
@@ -168,25 +129,10 @@ namespace Microsoft.Maui.Networking
 		internal void Dispose()
 		{
 			defaultRouteReachability?.Dispose();
-			defaultRouteReachability = null;
+			defaultRouteReachability = null!;
 			remoteHostReachability?.Dispose();
-			remoteHostReachability = null;
-
-#if !(MACCATALYST || MACOS)
-#pragma warning disable CA1416 // Analyzer bug https://github.com/dotnet/roslyn-analyzers/issues/5938
-			ConnectivityImplementation.CellularData.RestrictionDidUpdateNotifier = null;
-#pragma warning restore CA1416
-#endif
+			remoteHostReachability = null!;
 		}
-
-#if !(MACCATALYST || MACOS)
-#pragma warning disable BI1234
-		void OnRestrictedStateChanged(CTCellularDataRestrictedState state)
-		{
-			ReachabilityChanged?.Invoke();
-		}
-#pragma warning restore BI1234
-#endif
 
 		async void OnChange(NetworkReachabilityFlags flags)
 		{

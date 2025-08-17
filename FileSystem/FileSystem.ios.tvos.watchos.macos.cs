@@ -31,9 +31,7 @@ namespace Microsoft.Maui.Storage
 			filename = NormalizePath(filename);
 
 			var root = NSBundle.MainBundle.BundlePath;
-#if MACCATALYST || MACOS
 			root = Path.Combine(root, "Contents", "Resources");
-#endif
 			return Path.Combine(root, filename);
 		}
 
