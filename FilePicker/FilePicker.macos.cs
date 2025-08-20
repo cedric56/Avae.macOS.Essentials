@@ -15,7 +15,7 @@ namespace Microsoft.Maui.Storage
 			{
 				CanChooseFiles = true,
 				AllowsMultipleSelection = allowMultiple,
-				CanChooseDirectories = false
+				CanChooseDirectories = false,
 			};
 
 			if (options?.PickerTitle != null)

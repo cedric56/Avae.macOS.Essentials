@@ -47,6 +47,19 @@ NSLocationWhenInUseUsageDescription
 
 NSLocationAlwaysUsageDescription
 
+3. Initialize 
+
+````
+ using Microsoft.Maui.ApplicationModel;
+
+ public static AppBuilder BuildAvaloniaApp()
+        => AppBuilder.Configure<App>()
+            .UseMauiEssentials()
+            .UsePlatformDetect()
+            .WithInterFont()
+            .LogToTrace();
+````
+
 # Usage
 
 Once installed, you can use Microsoft.Maui.Essentials APIs within your Avalonia.macOS application. For example, access Geolocation.

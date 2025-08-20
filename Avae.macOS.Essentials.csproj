@@ -6,7 +6,7 @@
     <Nullable>enable</Nullable>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
     <PackageId>Avae.macOS.Essentials</PackageId>
-    <Version>1.0.1</Version>
+    <Version>1.0.2</Version>
     <Authors>cedricb</Authors>
     <Product>Avae.macOS.Essentials</Product>
     <Description>Portage of Microsoft.Maui.Essentials for macOS</Description>
@@ -19,6 +19,10 @@
     <RootNamespace>Microsoft.Maui.Essentials</RootNamespace>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="11.1.0"/>
+  </ItemGroup>
   
   <ItemGroup>
     <Compile Include="**\*.shared.cs" Exclude="$(DefaultItemExcludes);$(DefaultExcludesInProjectFolder)" />

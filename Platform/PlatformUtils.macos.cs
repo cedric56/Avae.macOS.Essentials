@@ -12,12 +12,11 @@ namespace Microsoft.Maui.ApplicationModel
 	{
 		internal static NSWindow GetCurrentWindow(bool throwIfNull = true)
 		{
-			var window = NSApplication.SharedApplication.MainWindow;
-
+			var window = WindowStateManager.Default.GetActiveWindow(false);
 			if (throwIfNull && window == null)
 				throw new InvalidOperationException("Could not find current window.");
 
-			return window;
+			return Runtime.GetNSObject<NSWindow>(window.TryGetPlatformHandle().Handle);
 		}
 	}
 
