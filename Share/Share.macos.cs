@@ -33,7 +33,7 @@ namespace Microsoft.Maui.ApplicationModel.DataTransfer
 
 		static Task PlatformShowRequestAsync(ShareRequestBase request, List<NSObject> items)
 		{
-			var window = PlatformUtils.GetCurrentWindow();
+			var window = WindowStateManager.Default.GetNSWindow();
 			var view = window.ContentView;
 
 			var rect = request.PresentationSourceBounds.AsCGRect();

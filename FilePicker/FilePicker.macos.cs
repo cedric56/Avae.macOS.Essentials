@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using AppKit;
+using Microsoft.Maui.ApplicationModel;
 using Microsoft.Maui.Devices;
 using MobileCoreServices;
 
@@ -11,12 +8,11 @@ namespace Microsoft.Maui.Storage
 	{
 		Task<IEnumerable<FileResult>> PlatformPickAsync(PickOptions options, bool allowMultiple = false)
 		{
-			var openPanel = new NSOpenPanel
-			{
-				CanChooseFiles = true,
-				AllowsMultipleSelection = allowMultiple,
-				CanChooseDirectories = false,
-			};
+			NSOpenPanel openPanel = NSOpenPanel.OpenPanel;
+
+			openPanel.CanChooseFiles = true;
+			openPanel.AllowsMultipleSelection = allowMultiple;
+			openPanel.CanChooseDirectories = false;
 
 			if (options?.PickerTitle != null)
 				openPanel.Title = options.PickerTitle;
@@ -24,17 +20,27 @@ namespace Microsoft.Maui.Storage
 			SetFileTypes(options, openPanel);
 
 			var resultList = new List<FileResult>();
-			var panelResult = openPanel.RunModal();
-			if (panelResult == (nint)(long)NSModalResponse.OK)
+			var window = WindowStateManager.Default.GetNSWindow();
+
+			openPanel.BeginSheet(window, result =>
 			{
-				foreach (var url in openPanel.Urls)
-					resultList.Add(new FileResult(url.Path));
-			}
+                if (result == (nint)(long)NSModalResponse.OK)
+                {
+                    foreach (var url in openPanel.Urls)
+                        resultList.Add(new FileResult(url.Path));
+                }
+            });
+			//var panelResult = openPanel.RunModal();
+			//if (panelResult == (nint)(long)NSModalResponse.OK)
+			//{
+			//	foreach (var url in openPanel.Urls)
+			//		resultList.Add(new FileResult(url.Path));
+			//}
 
 			return Task.FromResult<IEnumerable<FileResult>>(resultList);
 		}
 
-		static void SetFileTypes(PickOptions options, NSOpenPanel panel)
+		static void SetFileTypes(PickOptions? options, NSOpenPanel panel)
 		{
 			var allowedFileTypes = new List<string>();
 

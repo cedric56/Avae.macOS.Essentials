@@ -1,4 +1,5 @@
-﻿using Microsoft.Maui.Storage;
+﻿using Microsoft.Maui.ApplicationModel;
+using Microsoft.Maui.Storage;
 
 namespace Microsoft.Maui.Essentials.MediaPicker
 {
@@ -26,6 +27,10 @@ namespace Microsoft.Maui.Essentials.MediaPicker
                 Title = "Camera",
                 StyleMask = NSWindowStyle.Titled | NSWindowStyle.Closable | NSWindowStyle.Resizable
             };
+
+            var parentWindow = WindowStateManager.Default.GetNSWindow();
+            if (parentWindow != null)
+                parentWindow.AddChildWindow(window, NSWindowOrderingMode.Above);
 
             window.Center();
 

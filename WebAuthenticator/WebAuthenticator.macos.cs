@@ -64,7 +64,7 @@ namespace Microsoft.Maui.Authentication
 
 				using (was)
 				{
-					var ctx = new ContextProvider(PlatformUtils.GetCurrentWindow());
+					var ctx = new ContextProvider(WindowStateManager.Default.GetNSWindow());
 					was.PresentationContextProvider = ctx;
 					was.PrefersEphemeralWebBrowserSession = webAuthenticatorOptions?.PrefersEphemeralWebBrowserSession ?? false;
 

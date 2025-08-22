@@ -1,6 +1,7 @@
 ﻿using AVFoundation;
 using AVKit;
 using CoreMedia;
+using Microsoft.Maui.ApplicationModel;
 using Microsoft.Maui.Storage;
 
 namespace Microsoft.Maui.Essentials.MediaPicker
@@ -32,7 +33,7 @@ namespace Microsoft.Maui.Essentials.MediaPicker
                 StyleMask = NSWindowStyle.Titled | NSWindowStyle.Closable | NSWindowStyle.Resizable
             };
 
-            var parentWindow = NSApplication.SharedApplication.MainWindow;
+            var parentWindow = WindowStateManager.Default.GetNSWindow();
             if (parentWindow != null)
                 parentWindow.AddChildWindow(window, NSWindowOrderingMode.Above);
 

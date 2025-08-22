@@ -8,7 +8,7 @@ namespace Microsoft.Maui.Devices
 		uint keepScreenOnId = 0;
 		NSObject? screenMetricsObserver;
 
-		protected override bool GetKeepScreenOn() => keepScreenOnId != 0;
+        protected override bool GetKeepScreenOn() => keepScreenOnId != 0;
 
 		protected override void SetKeepScreenOn(bool keepScreenOn)
 		{

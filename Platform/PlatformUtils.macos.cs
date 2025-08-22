@@ -8,18 +8,6 @@ using System.Runtime.InteropServices;
 
 namespace Microsoft.Maui.ApplicationModel
 {
-	static class PlatformUtils
-	{
-		internal static NSWindow GetCurrentWindow(bool throwIfNull = true)
-		{
-			var window = WindowStateManager.Default.GetActiveWindow(false);
-			if (throwIfNull && window == null)
-				throw new InvalidOperationException("Could not find current window.");
-
-			return Runtime.GetNSObject<NSWindow>(window.TryGetPlatformHandle().Handle);
-		}
-	}
-
 	static class CoreGraphicsInterop
 	{
 		public static uint MainDisplayId => CGMainDisplayID();

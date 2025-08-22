@@ -1,5 +1,6 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
+using ObjCRuntime;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -71,6 +72,15 @@ namespace Microsoft.Maui.ApplicationModel
                 throw new NullReferenceException("The active Window cannot be detected. Ensure that you have called Init in your Application class.");
 
             return window;
+        }
+
+        internal static NSWindow GetNSWindow(this IWindowStateManager manager)
+        {
+            var window = WindowStateManager.Default.GetActiveWindow(false);
+            if (window == null)
+                throw new InvalidOperationException("Could not find current window.");
+
+            return Runtime.GetNSObject<NSWindow>(window.TryGetPlatformHandle().Handle);
         }
 
         /// <summary>
