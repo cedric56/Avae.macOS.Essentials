@@ -14,30 +14,55 @@ namespace Microsoft.Maui.ApplicationModel
 		{
 			_actions = actions;
 
-			var dock = NSApplication.SharedApplication.ApplicationDockMenu;
-			if (dock is not null)
-			{
-				var menu = dock.Invoke(NSApplication.SharedApplication);
+            var oldDelegate = NSApplication.SharedApplication.Delegate;
+            NSApplication.SharedApplication.Delegate = new ProxyAppDelegate(oldDelegate, actions);
 
-				foreach (var action in actions)
-				{
-					var item = new NSMenuItem(action.Title, (sender, e) =>
-					{
-						AppActionActivated?.Invoke(this, new AppActionEventArgs(action));
-					})
-					{
-						Subtitle = action.Subtitle,
-					};
-					if (action.Icon is not null)
-					{
-						item.Image = new NSImage(action.Icon);
-					}
-					menu.AddItem(item);
-				}
-			}
+            
 			return Task.CompletedTask;
 		}
 
 		public event EventHandler<AppActionEventArgs> AppActionActivated;
-	}
+
+        public class ProxyAppDelegate : NSApplicationDelegate
+        {
+            private readonly INSApplicationDelegate _inner;
+            private readonly IEnumerable<AppAction> _actions;
+
+            public ProxyAppDelegate(INSApplicationDelegate inner, IEnumerable<AppAction> actions)
+            {
+                _inner = inner;
+                _actions = actions;
+            }
+
+            public override NSMenu ApplicationDockMenu(NSApplication sender)
+            {
+                var menu = new NSMenu();
+                foreach (var action in _actions)
+                {
+                    var item = new NSMenuItem(action.Title, (s, e) =>
+                    {
+                        AppActionActivated?.Invoke(this, new AppActionEventArgs(action));
+                    })
+                    {
+                        Subtitle = action.Subtitle,
+                    };
+                    if (action.Icon is not null)
+                    {
+                        item.Image = new NSImage(action.Icon);
+                    };
+                    menu.AddItem(item);
+                }
+                return menu;
+            }
+
+            // Forward other delegate calls if Avalonia needs them
+            public override void DidFinishLaunching(NSNotification notification) =>
+                _inner?.DidFinishLaunching(notification);
+
+            public override bool ApplicationShouldTerminateAfterLastWindowClosed(NSApplication sender) =>
+                _inner?.ApplicationShouldTerminateAfterLastWindowClosed(sender) ?? true;
+
+            public event EventHandler<AppActionEventArgs> AppActionActivated;
+        }
+    }
 }
