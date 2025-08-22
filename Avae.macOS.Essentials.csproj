@@ -6,7 +6,7 @@
     <Nullable>enable</Nullable>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
     <PackageId>Avae.macOS.Essentials</PackageId>
-    <Version>1.0.2</Version>
+    <Version>1.0.3</Version>
     <Authors>cedricb</Authors>
     <Product>Avae.macOS.Essentials</Product>
     <Description>Portage of Microsoft.Maui.Essentials for macOS</Description>
