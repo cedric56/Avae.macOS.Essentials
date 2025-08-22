@@ -22,7 +22,7 @@ namespace Microsoft.Maui.Storage
 			var resultList = new List<FileResult>();
 			var window = WindowStateManager.Default.GetNSWindow();
 
-			var task = new TaskCompletionSource<List<FileResult>>()
+			var task = new TaskCompletionSource<List<FileResult>>();
 			openPanel.BeginSheet(window, result =>
 			{
                 if (result == (nint)(long)NSModalResponse.OK)
