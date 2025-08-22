@@ -6,7 +6,7 @@ namespace Microsoft.Maui.Storage
 {
 	partial class FilePickerImplementation : IFilePicker
 	{
-		Task<IEnumerable<FileResult>> PlatformPickAsync(PickOptions options, bool allowMultiple = false)
+		async Task<IEnumerable<FileResult>> PlatformPickAsync(PickOptions options, bool allowMultiple = false)
 		{
 			NSOpenPanel openPanel = NSOpenPanel.OpenPanel;
 
@@ -22,6 +22,7 @@ namespace Microsoft.Maui.Storage
 			var resultList = new List<FileResult>();
 			var window = WindowStateManager.Default.GetNSWindow();
 
+			var task = new TaskCompletionSource<List<FileResult>>()
 			openPanel.BeginSheet(window, result =>
 			{
                 if (result == (nint)(long)NSModalResponse.OK)
@@ -29,6 +30,8 @@ namespace Microsoft.Maui.Storage
                     foreach (var url in openPanel.Urls)
                         resultList.Add(new FileResult(url.Path));
                 }
+
+				task.SetResult(resultList);
             });
 			//var panelResult = openPanel.RunModal();
 			//if (panelResult == (nint)(long)NSModalResponse.OK)
@@ -36,8 +39,8 @@ namespace Microsoft.Maui.Storage
 			//	foreach (var url in openPanel.Urls)
 			//		resultList.Add(new FileResult(url.Path));
 			//}
-
-			return Task.FromResult<IEnumerable<FileResult>>(resultList);
+			await task.Task;
+			return resultList;
 		}
 
 		static void SetFileTypes(PickOptions? options, NSOpenPanel panel)
