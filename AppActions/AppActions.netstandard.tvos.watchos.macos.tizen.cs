@@ -14,9 +14,12 @@ namespace Microsoft.Maui.ApplicationModel
 		{
 			_actions = actions;
 
-            var oldDelegate = NSApplication.SharedApplication.Delegate;
-            NSApplication.SharedApplication.Delegate = new ProxyAppDelegate(oldDelegate, actions);
-
+            var proxy = new ProxyAppDelegate(actions);
+            proxy.AppActionActivated += (sender, e) =>
+            {
+                AppActionActivated?.Invoke(this, e);
+            };
+            NSApplication.SharedApplication.Delegate = proxy;
             
 			return Task.CompletedTask;
 		}
@@ -25,12 +28,10 @@ namespace Microsoft.Maui.ApplicationModel
 
         public class ProxyAppDelegate : NSApplicationDelegate
         {
-            private readonly INSApplicationDelegate _inner;
             private readonly IEnumerable<AppAction> _actions;
 
-            public ProxyAppDelegate(INSApplicationDelegate inner, IEnumerable<AppAction> actions)
+            public ProxyAppDelegate(IEnumerable<AppAction> actions)
             {
-                _inner = inner;
                 _actions = actions;
             }
 
@@ -54,13 +55,6 @@ namespace Microsoft.Maui.ApplicationModel
                 }
                 return menu;
             }
-
-            // Forward other delegate calls if Avalonia needs them
-            public override void DidFinishLaunching(NSNotification notification) =>
-                _inner?.DidFinishLaunching(notification);
-
-            public override bool ApplicationShouldTerminateAfterLastWindowClosed(NSApplication sender) =>
-                _inner?.ApplicationShouldTerminateAfterLastWindowClosed(sender) ?? true;
 
             public event EventHandler<AppActionEventArgs> AppActionActivated;
         }
