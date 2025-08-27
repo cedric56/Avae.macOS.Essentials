@@ -10,7 +10,8 @@ namespace Microsoft.Maui.ApplicationModel.Communication
 			var url = GetMailToUri(message);
 
 			using var nsurl = NSUrl.FromString(url);
-			NSWorkspace.SharedWorkspace.OpenUrl(nsurl);
+			if (nsurl is not null)
+				NSWorkspace.SharedWorkspace.OpenUrl(nsurl);
 			return Task.CompletedTask;
 		}
 	}

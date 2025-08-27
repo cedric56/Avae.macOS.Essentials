@@ -61,6 +61,7 @@ namespace Microsoft.Maui.ApplicationModel.Communication
 		}
 
 		internal static string GetMailToUri(EmailMessage message) =>
+			message is null ? "mailto:" :
 			"mailto:?" + string.Join("&", Parameters(message));
 
 		static IEnumerable<string> Parameters(EmailMessage message)
