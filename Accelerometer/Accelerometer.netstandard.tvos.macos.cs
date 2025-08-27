@@ -2,9 +2,9 @@ using Microsoft.Maui.ApplicationModel;
 
 namespace Microsoft.Maui.Devices.Sensors
 {
-	class NotImplementedAccelerometerImplementation : AccelerometerImplementationBase
+	class AccelerometerImplementation : AccelerometerImplementationBase
 	{
-		public override bool IsSupported =>
+        public override bool IsSupported =>
 			false;
 
 		protected override void PlatformStart(SensorSpeed sensorSpeed) =>

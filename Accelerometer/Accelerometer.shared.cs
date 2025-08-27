@@ -104,7 +104,7 @@ namespace Microsoft.Maui.Devices.Sensors
 
 		static IAccelerometer GetDefault()
 		{
-			return new NotImplementedAccelerometerImplementation();
+			return new AccelerometerImplementation();
 		}
 	}
 

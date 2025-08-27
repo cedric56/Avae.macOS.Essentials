@@ -74,10 +74,10 @@ namespace Microsoft.Maui.ApplicationModel.Communication
 			if (message.Bcc?.Count > 0)
 				yield return "bcc=" + Recipients(message.Bcc);
 
-			if (!string.IsNullOrWhiteSpace(message.Subject))
+			if (!string.IsNullOrWhiteSpace(message?.Subject))
 				yield return "subject=" + Uri.EscapeDataString(message.Subject);
 
-			if (!string.IsNullOrWhiteSpace(message.Body))
+			if (!string.IsNullOrWhiteSpace(message?.Body))
 				yield return "body=" + Uri.EscapeDataString(message.Body);
 		}
 
