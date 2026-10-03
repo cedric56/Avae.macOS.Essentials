@@ -1,3 +1,6 @@
+[!WARNING]
+This repository will be merged into [`Avae.Essentials`](https://github.com/cedric56/Avae.Essentials) as soon as [`Avalonia.Controls.Maui.Essentials`](https://github.com/AvaloniaUI/Avalonia.Controls.Maui.Essentials) is ready.**
+
 # Avae.macOS.Essentials
 
 A port of Microsoft.Maui.Essentials tailored for Avalonia.macOS, bringing essential cross-platform APIs to your Avalonia-based macOS applications.
@@ -22,7 +25,7 @@ An Avalonia.macOS project set up with .NET.
 
 1. Add Microsoft.Maui.Essentials to Your Shared Project
 
-In your shared project’s .csproj file, include the Microsoft.Maui.Essentials package. Use one of the following methods
+In your shared projectâ€™s .csproj file, include the Microsoft.Maui.Essentials package. Use one of the following methods
 ````
 <UseMauiEssentials>true</UseMauiEssentials>
 ````
@@ -91,7 +94,7 @@ Avae.macOS.Essentials is licensed under the MIT License.
 
 # Contributing
 
-Contributions are welcome! Please submit issues or pull requests to the GitHub repository. Ensure your code follows the project’s coding standards.
+Contributions are welcome! Please submit issues or pull requests to the GitHub repository. Ensure your code follows the projectâ€™s coding standards.
 
 # Acknowledgments
 
